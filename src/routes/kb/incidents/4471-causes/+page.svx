@@ -1,0 +1,39 @@
+---
+layout: runbook
+title: '#4471 · dates have two causes'
+owner: support desk
+status: known
+reviewed: 2026-10-28
+signature: MahabirSandhuHB
+---
+
+<script>
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+By 4 October, ticket [#4471](/kb/incidents/4471) held **412 unique reports** about dates
+showing the wrong day. Deduplicating the export by report ID and checking each tenant's
+locale and booking form shows two different problems, not one.
+
+| Problem | Reports | Evidence | Follow-up |
+| --- | ---: | --- | --- |
+| Shared parser reads month first for day-first locales | **379** | 11 tenants; app 204, email 150, form 25 | [Issue #1](https://github.com/MahabirSandhuHB/mega-s01e03-what-it-shows/issues/1) |
+| Booking-v3 date hint conflicts with day-first locale | **33** | 3 tenants; all 33 arrived through forms | [Issue #2](https://github.com/MahabirSandhuHB/mega-s01e03-what-it-shows/issues/2) |
+
+## What the reports show
+
+The shared parser treats dates as month-first. In day-first tenants, dates entered outside
+the booking-v3 form can therefore flip the day and month. These 379 reports arrived from
+1 April through 4 October 2026. Intake tagged 356 as `parser` and 23 as `hint`, which
+shows why the intake tag alone cannot identify the cause.
+
+The other 33 reports came from booking-v3 forms used by day-first tenants. Those forms
+instruct people to enter `MM/DD/YYYY`, while the tenant reads the date day-first. The
+reports came from alder.physio (12), copper.studio (11), and pale.harbour (10), from
+17 April through 22 September 2026. Intake tagged 18 as `hint` and 15 as `parser`.
+
+The export contains 427 rows because 15 report IDs appear more than once. Each report ID
+is counted once above. The cause split uses the tenant locale and form behavior described
+in `src/lib/kb/causes.ts`, not the intake tag.
+
+<RenderStamp {signature} />

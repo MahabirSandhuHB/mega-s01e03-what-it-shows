@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>#4471 · dates have two causes · support kb</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf7; --fg: #1d1d1b; --muted: #6b6a66; --line: #e3e0d8;
+      --accent: #2f6f5e; --warn: #b4501f;
+      --mono: ui-monospace, "Cascadia Code", Menlo, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #171716; --fg: #ecebe6; --muted: #9c9a93; --line: #34332f;
+        --accent: #6fbfa6; --warn: #f0905d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 2rem 16px 4rem; }
+    a { color: var(--accent); }
+    .crumb { font: 0.8rem var(--mono); text-decoration: none; color: var(--muted); }
+    h1 { margin: 0.25rem 0 0.5rem; line-height: 1.2; }
+    .meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; color: var(--muted); font-size: 0.85rem; margin: 0 0 2rem; }
+    .status { border: 1px solid var(--line); border-radius: 99px; padding: 0 0.6rem; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.92rem; }
+    th, td { border-bottom: 1px solid var(--line); padding: 0.45rem 0.5rem; text-align: left; vertical-align: top; }
+    code { font-family: var(--mono); font-size: 0.88em; }
+    .stamp { margin: 2rem 0 0; font: 0.85rem var(--mono); color: var(--muted); }
+    .stamp b { color: var(--accent); letter-spacing: 0.04em; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="crumb" href="/kb">support desk · kb</a>
+      <h1>#4471 · dates have two causes</h1>
+      <p class="meta">
+        <span>owner <b>support desk</b></span>
+        <span class="status">known</span>
+        <span>reviewed 2026-10-28</span>
+      </p>
+    </header>
+
+    <p>By 4 October, ticket <a href="/kb/incidents/4471">#4471</a> held <strong>412 unique reports</strong> about dates showing the wrong day. Deduplicating the export by report ID and checking each tenant's locale and booking form shows two different problems, not one.</p>
+
+    <table>
+      <thead>
+        <tr><th>Problem</th><th>Reports</th><th>Evidence</th><th>Follow-up</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Shared parser reads month first for day-first locales</td>
+          <td><strong>379</strong></td>
+          <td>11 tenants; app 204, email 150, form 25</td>
+          <td><a href="https://github.com/MahabirSandhuHB/mega-s01e03-what-it-shows/issues/1">Issue #1</a></td>
+        </tr>
+        <tr>
+          <td>Booking-v3 date hint conflicts with day-first locale</td>
+          <td><strong>33</strong></td>
+          <td>3 tenants; all 33 arrived through forms</td>
+          <td><a href="https://github.com/MahabirSandhuHB/mega-s01e03-what-it-shows/issues/2">Issue #2</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>What the reports show</h2>
+    <p>The shared parser treats dates as month-first. In day-first tenants, dates entered outside the booking-v3 form can therefore flip the day and month. These 379 reports arrived from 1 April through 4 October 2026. Intake tagged 356 as <code>parser</code> and 23 as <code>hint</code>, which shows why the intake tag alone cannot identify the cause.</p>
+    <p>The other 33 reports came from booking-v3 forms used by day-first tenants. Those forms instruct people to enter <code>MM/DD/YYYY</code>, while the tenant reads the date day-first. The reports came from alder.physio (12), copper.studio (11), and pale.harbour (10), from 17 April through 22 September 2026. Intake tagged 18 as <code>hint</code> and 15 as <code>parser</code>.</p>
+    <p>The export contains 427 rows because 15 report IDs appear more than once. Each report ID is counted once above. The cause split uses the tenant locale and form behavior described in <code>src/lib/kb/causes.ts</code>, not the intake tag.</p>
+
+    <p class="stamp">desk ref <b>DR-BHXK-EYJP</b></p>
+    <footer>Pages are written by people. Tables and charts are built from data at render time.</footer>
+  </main>
+</body>
+</html>
