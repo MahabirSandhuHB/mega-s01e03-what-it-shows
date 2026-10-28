@@ -40,7 +40,7 @@
       <h1>#4471 · dates have two causes</h1>
       <p class="meta">
         <span>owner <b>support desk</b></span>
-        <span class="status">known</span>
+        <span class="status">closed</span>
         <span>reviewed 2026-10-28</span>
       </p>
     </header>
@@ -68,9 +68,22 @@
     </table>
 
     <h2>What the reports show</h2>
-    <p>The shared parser treats dates as month-first. In day-first tenants, dates entered outside the booking-v3 form can therefore flip the day and month. These 379 reports arrived from 1 April through 4 October 2026. Intake tagged 356 as <code>parser</code> and 23 as <code>hint</code>, which shows why the intake tag alone cannot identify the cause.</p>
-    <p>The other 33 reports came from booking-v3 forms used by day-first tenants. Those forms instruct people to enter <code>MM/DD/YYYY</code>, while the tenant reads the date day-first. The reports came from alder.physio (12), copper.studio (11), and pale.harbour (10), from 17 April through 22 September 2026. Intake tagged 18 as <code>hint</code> and 15 as <code>parser</code>.</p>
+    <p>The shared parser treated dates as month-first. In day-first tenants, dates entered outside the booking-v3 form could therefore flip the day and month. These 379 reports arrived from 1 April through 4 October 2026. Intake tagged 356 as <code>parser</code> and 23 as <code>hint</code>, which shows why the intake tag alone cannot identify the cause.</p>
+    <p>The other 33 reports came from booking-v3 forms used by day-first tenants. Those forms instructed people to enter <code>MM/DD/YYYY</code>, while the tenant read the date day-first. The reports came from alder.physio (12), copper.studio (11), and pale.harbour (10), from 17 April through 22 September 2026. Intake tagged 18 as <code>hint</code> and 15 as <code>parser</code>.</p>
     <p>The export contains 427 rows because 15 report IDs appear more than once. Each report ID is counted once above. The cause split uses the tenant locale and form behavior described in <code>src/lib/kb/causes.ts</code>, not the intake tag.</p>
+
+    <h2>Engineering outcome: 5 October 2026</h2>
+    <p>The engineering update on the <a href="https://hq.mega.dev/challenges/what-it-shows">course challenge page</a> reports that #4471 closed on 5 October:</p>
+    <table>
+      <thead>
+        <tr><th>Problem</th><th>Disposition</th><th>Engineering update</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Shared parser (379 reports; Issue #1)</td><td><strong>FIXED</strong></td><td><code>fix(dates): parse dd/mm for eu locales</code></td></tr>
+        <tr><td>Booking-v3 date hint (33 reports; Issue #2)</td><td><strong>WON'T FIX</strong></td><td>booking-v3 form retired</td></tr>
+      </tbody>
+    </table>
+    <p>These are different outcomes: the parser was fixed, but the hint was not fixed; its form was retired. Close Issue #1 as completed and Issue #2 as not planned. These dispositions come from the desk's engineering update, not from a product fix implemented in this repo.</p>
 
     <p class="stamp">desk ref <b>DR-6DBJ-CN91</b></p>
     <footer>Pages are written by people. Tables and charts are built from data at render time.</footer>

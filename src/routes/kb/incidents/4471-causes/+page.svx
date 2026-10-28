@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · dates have two causes'
 owner: support desk
-status: known
+status: closed
 reviewed: 2026-10-28
 signature: v1.eyJzdWIiOiI0MTA1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyMDE4NzksImV4cCI6MTc5MzI4ODI3OX0.0xtFrGwbJ113Ips4FTcgr_HbdCTfHSrdtbKIN5FxuUo
 ---
@@ -22,18 +22,32 @@ locale and booking form shows two different problems, not one.
 
 ## What the reports show
 
-The shared parser treats dates as month-first. In day-first tenants, dates entered outside
-the booking-v3 form can therefore flip the day and month. These 379 reports arrived from
+The shared parser treated dates as month-first. In day-first tenants, dates entered outside
+the booking-v3 form could therefore flip the day and month. These 379 reports arrived from
 1 April through 4 October 2026. Intake tagged 356 as `parser` and 23 as `hint`, which
 shows why the intake tag alone cannot identify the cause.
 
 The other 33 reports came from booking-v3 forms used by day-first tenants. Those forms
-instruct people to enter `MM/DD/YYYY`, while the tenant reads the date day-first. The
+instructed people to enter `MM/DD/YYYY`, while the tenant read the date day-first. The
 reports came from alder.physio (12), copper.studio (11), and pale.harbour (10), from
 17 April through 22 September 2026. Intake tagged 18 as `hint` and 15 as `parser`.
 
 The export contains 427 rows because 15 report IDs appear more than once. Each report ID
 is counted once above. The cause split uses the tenant locale and form behavior described
 in `src/lib/kb/causes.ts`, not the intake tag.
+
+## Engineering outcome: 5 October 2026
+
+The engineering update on the [course challenge page](https://hq.mega.dev/challenges/what-it-shows)
+reports that #4471 closed on 5 October:
+
+| Problem | Disposition | Engineering update |
+| --- | --- | --- |
+| Shared parser (379 reports; Issue #1) | **FIXED** | `fix(dates): parse dd/mm for eu locales` |
+| Booking-v3 date hint (33 reports; Issue #2) | **WON'T FIX** | booking-v3 form retired |
+
+These are different outcomes: the parser was fixed, but the hint was not fixed; its form
+was retired. Close Issue #1 as completed and Issue #2 as not planned. These dispositions
+come from the desk's engineering update, not from a product fix implemented in this repo.
 
 <RenderStamp {signature} />
